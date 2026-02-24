@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Tax Invoice</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 12px;
+            color: #000;
+        }
+        .invoice-box {
+            width: 100%;
+            border: 1px solid #999;
+            padding: 10px;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        td, th {
+            border: 1px solid #999;
+            padding: 6px;
+            vertical-align: top;
+        }
+        .no-border {
+            border: none !important;
+        }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .text-center { text-align: center; }
+        .bold { font-weight: bold; }
+        .title { font-size: 26px; font-weight: bold; text-align: right; }
+        .section-title { background: #f2f2f2; font-weight: bold; }
+        .signature { height: 70px; text-align: center; vertical-align: bottom; }
+    </style>
+</head>
+<body>
+
+<div class="invoice-box">
+
+    <!-- HEADER -->
+    <table>
+        <tr>
+            <td class="no-border">
+                <!-- Logo -->
+                <!-- <img src="{{ logo_path }}" height="60" style="display: block;"><br><br> -->
+
+                <strong>The X Perfumes</strong><br>
+                Coimbatore, Tamil Nadu 641006<br>
+                India<br>
+                GSTIN: 33ASHPA2999P1Z7<br>
+                Phone: 91-8610871752<br>
+                thexperfumes@gmail.com
+            </td>
+            <td class="no-border title">
+                TAX INVOICE
+            </td>
+        </tr>
+    </table>
+
+    <!-- INVOICE META -->
+    <table>
+        <tr>
+            <td width="60%">
+                <table>
+                    <tr>
+                        <td class="no-border bold">Invoice No</td>
+                        <td class="no-border">: {{ order.invoice_number }}</td>
+                    </tr>
+                    <tr>
+                        <td class="no-border bold">Invoice Date</td>
+                        <td class="no-border">: {{ order.created_at|date:"d F Y" }}</td>
+                    </tr>
+                    <tr>
+                        <td class="no-border bold">Payment Mode</td>
+                        <td class="no-border">: {{ order.payment_mode }}</td>
+                    </tr>
+                </table>
+            </td>
+            <td width="40%">
+                <table>
+                    <tr>
+                        <td class="no-border bold">Place Of Supply</td>
+                        <td class="no-border">: Tamil Nadu (33)</td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- BILL TO -->
+    <table>
+        <tr>
+            <td class="section-title">Bill To</td>
+        </tr>
+        <tr>
+            <td>
+                <strong>{{ order.ship_name }}</strong><br>
+                {{ order.ship_address }}<br>
+                <strong>Pincode:</strong> {{ order.ship_pincode }}<br>
+                <strong>Phone:</strong> {{ order.ship_phone }}
+            </td>
+        </tr>
+    </table>
+
+    <!-- ITEMS -->
+    <table>
+        <tr class="section-title text-center">
+            <th>#</th>
+            <th>Item</th>
+            <th>HSN</th>
+            <th>Qty</th>
+            <th>Rate</th>
+            <th colspan="2">CGST</th>
+            <th colspan="2">SGST</th>
+            <th>Amount</th>
+        </tr>
+        <tr class="section-title text-center">
+            <th></th><th></th><th></th><th></th><th></th>
+            <th>%</th><th>Amt</th>
+            <th>%</th><th>Amt</th>
+            <th></th>
+        </tr>
+
+        {% for item in order.items.all %}
+        <tr class="text-center">
+            <td>{{ forloop.counter }}</td>
+            <td class="text-left">{{ item.perfume.name }}</td>
+            <td>33072000</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.price }}</td>
+            <td>9%</td>
+            <td>{{ item.cgst_amount }}</td>
+            <td>9%</td>
+            <td>{{ item.sgst_amount }}</td>
+            <td>{{ item.total_amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <!-- TOTALS -->
+    <table>
+        <tr>
+            <td width="60%" class="no-border">
+                <strong>Total In Words</strong><br>
+                {{ order.total_in_words }}<br><br>
+
+                <strong>Notes</strong><br>
+                Thanks for your business.
+            </td>
+
+            <td width="40%">
+                <table>
+                    <tr>
+                        <td class="no-border">Sub Total</td>
+                        <td class="no-border text-right">{{ order.subtotal }}</td>
+                    </tr>
+
+                    {% if order.discount_amount %}
+                    <tr>
+                        <td class="no-border">Discount</td>
+                        <td class="no-border text-right">- ₹{{ order.discount_amount }}</td>
+                    </tr>
+                    {% endif %}
+
+                    <tr>
+                        <td class="no-border">Shipping Charge</td>
+                        <td class="no-border text-right">₹ {{ order.shipping_charge }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border">CGST (9%)</td>
+                        <td class="no-border text-right">{{ order.cgst_total }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border">SGST (9%)</td>
+                        <td class="no-border text-right">{{ order.sgst_total }}</td>
+                    </tr>
+
+                    <tr class="bold">
+                        <td class="no-border">Total</td>
+                        <td class="no-border text-right">₹ {{ order.total_amount }}</td>
+                    </tr>
+
+                    <tr>
+                        <td class="no-border">Payment Made</td>
+                        <td class="no-border text-right">(₹ {{ order.total_amount }})</td>
+                    </tr>
+
+                    <tr class="bold">
+                        <td class="no-border">Balance Due</td>
+                        <td class="no-border text-right">₹ 0.00</td>
+                    </tr>
+                </table>
+
+                <table>
+                    <tr>
+                        <td class="signature no-border">
+                            Alexander V<br><br>
+                            <strong>Authorized Signature</strong>
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
+    </table>
+
+</div>
+</body>
+</html>

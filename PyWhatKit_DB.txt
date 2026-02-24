@@ -1,0 +1,20 @@
+Date: 8/2/2026
+Time: 7:28
+Phone Number: +916369868846
+Message: New Order Placed!Invoice No: INV-015Customer: karthiTotal Amount: ₹0Payment Mode: RAZORPAY
+--------------------
+Date: 8/2/2026
+Time: 7:38
+Phone Number: +916369868846
+Message: New Order Placed!Invoice No: INV-016Customer: karthiTotal Amount: ₹0Payment Mode: RAZORPAY
+--------------------
+Date: 8/2/2026
+Time: 10:0
+Phone Number: +916369868846
+Message: New Order Placed!Invoice No: INV-017Customer: karthiTotal Amount: ₹0Payment Mode: RAZORPAY
+--------------------
+Date: 8/2/2026
+Time: 10:2
+Phone Number: +916369868846
+Message: New Order Placed!Invoice No: INV-018Customer: karthiTotal Amount: ₹35900.00Payment Mode: RAZORPAY
+--------------------

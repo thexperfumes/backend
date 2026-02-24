@@ -7,7 +7,7 @@ import threading
 
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from orders.utils.send_whatsapp_admin import send_whatsapp_admin  # Make sure this exists
+# from orders.utils.send_whatsapp_admin import send_whatsapp_admin  # Make sure this exists
 
 # ================= ORDER MODEL =================
 class Order(models.Model):

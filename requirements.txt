@@ -1,4 +1,5 @@
 setuptools==82.0.0
+pkg_resources
 Django==4.2.21
 djangorestframework==3.16.1
 djangorestframework_simplejwt==5.5.1

@@ -223,11 +223,3 @@ RAZORPAY_KEY_ID = "rzp_test_SBa7QnyaYJbenV"
 RAZORPAY_KEY_SECRET = "H6cXeQKWIVod65TF3E2xP1q0"
 
 
-ASGI_APPLICATION = 'backend.asgi.application'
-
-# Optional: Redis backend for production
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels.layers.InMemoryChannelLayer"
-    }
-}

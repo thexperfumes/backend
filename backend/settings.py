@@ -25,8 +25,16 @@ SECRET_KEY = 'django-insecure-f!j535($9!87ke@dfzvcpvwmqddoz+j2_=e#joke^3nh$$mqa%
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+
 import os
 import dj_database_url
+
+DATABASES = {
+    "default": dj_database_url.config(
+        default=os.environ.get("DATABASE_URL"),
+        conn_max_age=600
+    )
+}
 
 ALLOWED_HOSTS = ['.onrender.com']
 

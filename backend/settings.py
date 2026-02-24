@@ -36,6 +36,7 @@ ALLOWED_HOSTS = ['.onrender.com']
 INSTALLED_APPS = [
          
     'django.contrib.admin',
+'channels',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',

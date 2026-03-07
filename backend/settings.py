@@ -229,21 +229,43 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # EMAIL_USE_TLS = True
 # EMAIL_HOST_USER = "yourmail@gmail.com"
 # EMAIL_HOST_PASSWORD = "app-password"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
-EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_TIMEOUT = 10
+# # EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
+# # EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
+# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+# DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'
+
+
+
+import os
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+EMAIL_HOST = "smtp-relay.brevo.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 10
-# EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
-# EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
-EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'
+
+EMAIL_HOST_USER = "apikey"
+EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
+
+DEFAULT_FROM_EMAIL = "Perfume Store <thexperfumes@gmail.com>"
+
 AUTHENTICATION_BACKENDS = [
-    "django.contrib.auth.backends.ModelBackend",  # FIRST
-    "accounts.backends.EmailBackend",              # SECOND
+    "django.contrib.auth.backends.ModelBackend",
+    "accounts.backends.EmailBackend",
 ]
+
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",  # FIRST
+#     "accounts.backends.EmailBackend",              # SECOND
+# ]
 
 
 # FRONTEND_URL = "http://localhost:5173"  # change to prod later

@@ -235,9 +235,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
-EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
-
+# EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
+# EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
+EMAIL_HOST_USER = os.environ.get("thexperfumes@gmail.com")
+EMAIL_HOST_PASSWORD = os.environ.get("vvhlgvkjrzuerzsx")
 DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",  # FIRST

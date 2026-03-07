@@ -195,23 +195,23 @@ SIMPLE_JWT = {
 # CSRF_TRUSTED_ORIGINS = [
 #     "https://thexperfumes.com",
 # ]
-CORS_ALLOW_CREDENTIALS = True
+# CORS_ALLOW_CREDENTIALS = True
 
-CORS_ALLOWED_ORIGINS = [
-    "https://thexperfumes.com",
-]
+# CORS_ALLOWED_ORIGINS = [
+#     "https://thexperfumes.com",
+# ]
 
-CSRF_TRUSTED_ORIGINS = [
-    "https://thexperfumes.com",
-]
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://thexperfumes.com",
+# ]
 
-FRONTEND_URL = "https://thexperfumes.com"
+# FRONTEND_URL = "https://thexperfumes.com"
 
-CSRF_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SAMESITE = "None"
+# CSRF_COOKIE_SAMESITE = "None"
+# SESSION_COOKIE_SAMESITE = "None"
 
-CSRF_COOKIE_SECURE = False
-SESSION_COOKIE_SECURE = False
+# CSRF_COOKIE_SECURE = False
+# SESSION_COOKIE_SECURE = False
 
 
 # ======================
@@ -235,10 +235,10 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-# EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
-# EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
-EMAIL_HOST_USER = os.environ.get("thexperfumes@gmail.com")
-EMAIL_HOST_PASSWORD = os.environ.get("vvhlgvkjrzuerzsx")
+EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
+EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",  # FIRST
@@ -263,3 +263,22 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
+
+
+CORS_ALLOW_CREDENTIALS = True
+
+CORS_ALLOWED_ORIGINS = [
+    "https://thexperfumes.com",
+    "https://www.thexperfumes.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://thexperfumes.com",
+    "https://www.thexperfumes.com",
+]
+
+CSRF_COOKIE_SAMESITE = "None"
+SESSION_COOKIE_SAMESITE = "None"
+
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True

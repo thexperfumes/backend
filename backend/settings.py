@@ -36,8 +36,14 @@ DATABASES = {
     )
 }
 
-ALLOWED_HOSTS = ['.onrender.com']
+# ALLOWED_HOSTS = ['.onrender.com']
 
+
+ALLOWED_HOSTS = [
+    ".onrender.com",
+    "thexperfumes.com",
+    "www.thexperfumes.com",
+]
 
 # Application definition
 
@@ -180,6 +186,15 @@ SIMPLE_JWT = {
 # CORS + CSRF (FINAL)
 # ======================
 
+# CORS_ALLOW_CREDENTIALS = True
+
+# CORS_ALLOWED_ORIGINS = [
+#     "https://thexperfumes.com",
+# ]
+
+# CSRF_TRUSTED_ORIGINS = [
+#     "https://thexperfumes.com",
+# ]
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
@@ -189,6 +204,8 @@ CORS_ALLOWED_ORIGINS = [
 CSRF_TRUSTED_ORIGINS = [
     "https://thexperfumes.com",
 ]
+
+FRONTEND_URL = "https://thexperfumes.com"
 
 CSRF_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SAMESITE = "None"
@@ -228,7 +245,7 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 
-FRONTEND_URL = "http://localhost:5173"  # change to prod later
+# FRONTEND_URL = "http://localhost:5173"  # change to prod later
 RAZORPAY_KEY_ID = "rzp_test_SBa7QnyaYJbenV"
 RAZORPAY_KEY_SECRET = "H6cXeQKWIVod65TF3E2xP1q0"
 

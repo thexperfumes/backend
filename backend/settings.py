@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-f!j535($9!87ke@dfzvcpvwmqddoz+j2_=e#joke^3nh$$mqa%'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 
 import os
@@ -235,8 +235,8 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 
-EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
-EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
+# EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
+# EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'

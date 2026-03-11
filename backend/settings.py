@@ -255,7 +255,7 @@ EMAIL_TIMEOUT = 10
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 
-DEFAULT_FROM_EMAIL = "Perfume Store <thexperfumes@gmail.com>"
+DEFAULT_FROM_EMAIL = "Perfume Store <no-reply@thexperfumes.com>"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",

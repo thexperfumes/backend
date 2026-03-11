@@ -252,8 +252,8 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 10
 
-EMAIL_HOST_USER = "apikey"
-EMAIL_HOST_PASSWORD = os.environ.get("BREVO_SMTP_KEY")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 
 DEFAULT_FROM_EMAIL = "Perfume Store <thexperfumes@gmail.com>"
 

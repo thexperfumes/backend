@@ -61,36 +61,7 @@ class ChangePasswordView(APIView):
         return Response({"message": "Password changed successfully"})
 
 
-# =======================
-# 👤 CUSTOMER AUTH (OTP FLOW)
-# =======================
-# class CustomerSendOTP(APIView):
-#     permission_classes = [AllowAny]
 
-#     def post(self, request):
-#         email = request.data.get("email")
-#         if not email:
-#             return Response({"error": "Email is required"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         if CustomUser.objects.filter(email=email, is_active=True).exists():
-#             return Response({"error": "This email is already registered. Please login."}, status=status.HTTP_400_BAD_REQUEST)
-
-#         otp = str(random.randint(100000, 999999))
-#         EmailOTP.objects.filter(user__email=email).delete()
-#         customer, _ = CustomUser.objects.get_or_create(email=email, defaults={"is_active": False})
-#         EmailOTP.objects.create(user=customer, otp=otp)
-
-#         subject = "Your One-Time Password (OTP) Verification"
-#         message = (
-#             f"Your One-Time Password (OTP) for verifying your email is:"
-#             f"        {otp}"
-#             "This OTP is valid for 5 minutes. Do not share this OTP."
-#             "If you did not request this code, please ignore this email.\n"
-#             "Best regards,\nPerfume Store Team"
-#         )
-#         send_mail(subject=subject, message=message, from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email], fail_silently=False)
-
-#         return Response({"message": "OTP has been sent to your email"})
 
 class CustomerSendOTP(APIView):
     permission_classes = [AllowAny]
@@ -128,37 +99,19 @@ Perfume Store Team
 """
 
         try:
-            send_mail(
-                subject,
-                message,
-                settings.DEFAULT_FROM_EMAIL,
-                [email],
-                fail_silently=False
-            )
+                send_mail(
+                    subject,
+                    message,
+                    settings.DEFAULT_FROM_EMAIL,
+                    [email],
+                    fail_silently=False
+                )
         except Exception as e:
-            print("Email error:", e)
-            return Response({"error": "Email sending failed"}, status=500)
+                    print("Email error:", repr(e))
+                    import traceback
+                    traceback.print_exc()
+                    return Response({"error": f"Email sending failed: {str(e)}"}, status=500)
 
-        return Response({"message": "OTP sent successfully"})
-# class CustomerVerifyOTP(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         email = request.data.get("email")
-#         otp = request.data.get("otp")
-
-#         customer = CustomUser.objects.filter(email=email).first()
-#         if not customer:
-#             return Response({"error": "Invalid email"}, status=400)
-
-#         otp_obj = EmailOTP.objects.filter(user=customer, otp=otp).first()
-#         if not otp_obj:
-#             return Response({"error": "Invalid OTP"}, status=400)
-
-#         customer.is_email_verified = True
-#         customer.save()
-#         otp_obj.delete()  # OTP used once
-#         return Response({"message": "Email verified successfully"})
 
 class CustomerVerifyOTP(APIView):
     permission_classes = [AllowAny]

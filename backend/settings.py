@@ -243,6 +243,30 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 
+# import os
+
+# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+
+# EMAIL_HOST = "smtp-relay.brevo.com"
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_TIMEOUT = 10
+
+# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
+# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+
+# DEFAULT_FROM_EMAIL = "Perfume Store <support@thexperfumes.com>"
+
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",
+#     "accounts.backends.EmailBackend",
+# ]
+
+# AUTHENTICATION_BACKENDS = [
+#     "django.contrib.auth.backends.ModelBackend",  # FIRST
+#     "accounts.backends.EmailBackend",              # SECOND
+# ]
+
 import os
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -252,22 +276,16 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_TIMEOUT = 10
 
-EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 
-DEFAULT_FROM_EMAIL = "Perfume Store <support@thexperfumes.com>"
+DEFAULT_FROM_EMAIL = "Perfume Store <contact@thexperfumes.com>"
+SERVER_EMAIL = "contact@thexperfumes.com"
 
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
     "accounts.backends.EmailBackend",
 ]
-
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",  # FIRST
-#     "accounts.backends.EmailBackend",              # SECOND
-# ]
-
-
 # FRONTEND_URL = "http://localhost:5173"  # change to prod later
 RAZORPAY_KEY_ID = "rzp_test_SBa7QnyaYJbenV"
 RAZORPAY_KEY_SECRET = "H6cXeQKWIVod65TF3E2xP1q0"

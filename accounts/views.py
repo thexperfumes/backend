@@ -63,6 +63,14 @@ class ChangePasswordView(APIView):
 
 
 
+import os
+import random
+import requests
+
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import AllowAny
+
 class CustomerSendOTP(APIView):
     permission_classes = [AllowAny]
 
@@ -88,30 +96,55 @@ class CustomerSendOTP(APIView):
 
         subject = "Your OTP Verification Code"
 
-        message = f"""
-Your One-Time Password (OTP) is:
+        html_content = f"""
+        <html>
+            <body>
+                <p>Your One-Time Password (OTP) is:</p>
+                <h2>{otp}</h2>
+                <p>This OTP is valid for 5 minutes.</p>
+                <p>Perfume Store Team</p>
+            </body>
+        </html>
+        """
 
-{otp}
-
-This OTP is valid for 5 minutes.
-
-Perfume Store Team
-"""
+        url = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "api-key": os.environ.get("BREVO_API_KEY"),
+            "content-type": "application/json",
+        }
+        data = {
+            "sender": {
+                "name": "Perfume Store",
+                "email": "contact@thexperfumes.com"
+            },
+            "to": [
+                {"email": email}
+            ],
+            "subject": subject,
+            "htmlContent": html_content,
+        }
 
         try:
-                send_mail(
-                    subject,
-                    message,
-                    settings.DEFAULT_FROM_EMAIL,
-                    [email],
-                    fail_silently=False
-                )
-        except Exception as e:
-                    print("Email error:", repr(e))
-                    import traceback
-                    traceback.print_exc()
-                    return Response({"error": f"Email sending failed: {str(e)}"}, status=500)
-
+            response = requests.post(url, headers=headers, json=data, timeout=30)
+            response.raise_for_status()
+            return Response(
+                {"message": "OTP sent successfully"},
+                status=200
+            )
+        except requests.exceptions.RequestException as e:
+            print("Brevo API error:", repr(e))
+            try:
+                print("Brevo response:", response.text)
+            except:
+                pass
+            return Response(
+                {"error": f"Email sending failed: {str(e)}"},
+                status=500
+            )
+        
+from datetime import timedelta
+from django.utils import timezone
 
 class CustomerVerifyOTP(APIView):
     permission_classes = [AllowAny]
@@ -120,16 +153,25 @@ class CustomerVerifyOTP(APIView):
         email = request.data.get("email")
         otp = request.data.get("otp")
 
-        customer = CustomUser.objects.filter(email=email).first()
-        if not customer:
-            return Response({"error": "Invalid email"}, status=400)
+        if not email or not otp:
+            return Response({"error": "Email and OTP are required"}, status=400)
 
-        otp_obj = EmailOTP.objects.filter(user=customer, otp=otp).first()
+        otp_obj = EmailOTP.objects.filter(
+            user__email=email,
+            otp=otp
+        ).select_related("user").first()
+
         if not otp_obj:
             return Response({"error": "Invalid OTP"}, status=400)
 
+        # ⏳ Expiry check (5 min)
+        if timezone.now() > otp_obj.created_at + timedelta(minutes=5):
+            otp_obj.delete()
+            return Response({"error": "OTP expired"}, status=400)
+
+        customer = otp_obj.user
         customer.is_email_verified = True
-        customer.is_active = True   # 🔥🔥🔥 ADD THIS LINE
+        customer.is_active = True
         customer.save()
 
         otp_obj.delete()
@@ -161,28 +203,6 @@ class CustomerRegisterView(APIView):
 
         return Response({"message": "Registration successful"}, status=status.HTTP_201_CREATED)
 
-
-# class CustomerLoginView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         email = request.data.get("email")
-#         password = request.data.get("password")
-#         if not email or not password:
-#             return Response({"error": "Email and password are required"}, status=status.HTTP_400_BAD_REQUEST)
-
-#         user = authenticate(request, email=email, password=password)
-#         if not user:
-#             return Response({"error": "Invalid email or password"}, status=status.HTTP_401_UNAUTHORIZED)
-#         if not user.is_email_verified:
-#             return Response({"error": "Email not verified"}, status=status.HTTP_403_FORBIDDEN)
-
-#         refresh = RefreshToken.for_user(user)
-#         return Response({
-#             "access": str(refresh.access_token),
-#             "refresh": str(refresh),
-#             "user": {"email": user.email, "name": user.name, "role": user.role}
-#         }, status=status.HTTP_200_OK)
 
 class CustomerLoginView(APIView):
     permission_classes = [AllowAny]

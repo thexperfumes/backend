@@ -103,13 +103,6 @@ TEMPLATES = [
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -183,35 +176,7 @@ SIMPLE_JWT = {
 # CORS
 # ======================
 # ======================
-# CORS + CSRF (FINAL)
-# ======================
 
-# CORS_ALLOW_CREDENTIALS = True
-
-# CORS_ALLOWED_ORIGINS = [
-#     "https://thexperfumes.com",
-# ]
-
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://thexperfumes.com",
-# ]
-# CORS_ALLOW_CREDENTIALS = True
-
-# CORS_ALLOWED_ORIGINS = [
-#     "https://thexperfumes.com",
-# ]
-
-# CSRF_TRUSTED_ORIGINS = [
-#     "https://thexperfumes.com",
-# ]
-
-# FRONTEND_URL = "https://thexperfumes.com"
-
-# CSRF_COOKIE_SAMESITE = "None"
-# SESSION_COOKIE_SAMESITE = "None"
-
-# CSRF_COOKIE_SECURE = False
-# SESSION_COOKIE_SECURE = False
 
 
 # ======================
@@ -223,49 +188,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # ======================
 # EMAIL (GMAIL)
 # ======================
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-# EMAIL_HOST = "smtp.gmail.com"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_HOST_USER = "yourmail@gmail.com"
-# EMAIL_HOST_PASSWORD = "app-password"
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-
-# EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_TIMEOUT = 10
-# # EMAIL_HOST_USER = 'thexperfumes@gmail.com'   # your gmail
-# # EMAIL_HOST_PASSWORD = 'vvhlgvkjrzuerzsx'
-# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-# DEFAULT_FROM_EMAIL = 'MyApp <thexperfumes@gmail.com>'
-
-
-
-# import os
-
-# EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-
-# EMAIL_HOST = "smtp-relay.brevo.com"
-# EMAIL_PORT = 587
-# EMAIL_USE_TLS = True
-# EMAIL_TIMEOUT = 10
-
-# EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
-# EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
-
-# DEFAULT_FROM_EMAIL = "Perfume Store <support@thexperfumes.com>"
-
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",
-#     "accounts.backends.EmailBackend",
-# ]
-
-# AUTHENTICATION_BACKENDS = [
-#     "django.contrib.auth.backends.ModelBackend",  # FIRST
-#     "accounts.backends.EmailBackend",              # SECOND
-# ]
 
 import os
 

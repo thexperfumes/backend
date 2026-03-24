@@ -1,16 +1,13 @@
-from django.core.mail import EmailMessage
 from django.conf import settings
+from django.core.mail import EmailMessage
 from .generate_invoice_pdf import generate_invoice_pdf
+import os
+
 
 def send_invoice_email(order):
-    """
-    Sends invoice email to both customer and admin.
-    Customer gets thank-you message.
-    Admin gets invoice PDF + order details.
-    """
     pdf_buffer = generate_invoice_pdf(order)
+    pdf_bytes = pdf_buffer.getvalue()
 
-    # ---------- Customer Email ----------
     customer_email = EmailMessage(
         subject=f"Invoice {order.invoice_number}",
         body=(
@@ -24,12 +21,10 @@ def send_invoice_email(order):
     )
     customer_email.attach(
         f"Invoice_{order.invoice_number}.pdf",
-        pdf_buffer.getvalue(),
+        pdf_bytes,
         "application/pdf"
     )
-    customer_email.send(fail_silently=False)
 
-    # ---------- Admin Email with Order Details ----------
     order_items_text = "\n".join([
         f"- {item.perfume.name} x {item.quantity} = ₹{item.total_amount}"
         for item in order.items.all()
@@ -47,14 +42,16 @@ def send_invoice_email(order):
     )
 
     admin_email = EmailMessage(
-        subject=f"🛒 New Order - {order.invoice_number}",
+        subject=f"New Order - {order.invoice_number}",
         body=admin_body,
         from_email=settings.DEFAULT_FROM_EMAIL,
-        to=[settings.DEFAULT_FROM_EMAIL],  # Admin email
+        to=[os.environ.get("ADMIN_ORDER_EMAIL", "contact@thexperfumes.com")],
     )
     admin_email.attach(
         f"Invoice_{order.invoice_number}.pdf",
-        pdf_buffer.getvalue(),
+        pdf_bytes,
         "application/pdf"
     )
+
+    customer_email.send(fail_silently=False)
     admin_email.send(fail_silently=False)

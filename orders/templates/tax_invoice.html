@@ -4,47 +4,97 @@
     <meta charset="UTF-8">
     <title>Tax Invoice</title>
     <style>
+        @page {
+            size: A4;
+            margin: 12mm;
+        }
+
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
             color: #000;
+            margin: 0;
+            padding: 0;
         }
+
         .invoice-box {
             width: 100%;
             border: 1px solid #999;
             padding: 10px;
+            box-sizing: border-box;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
+            table-layout: fixed;
         }
+
         td, th {
             border: 1px solid #999;
             padding: 6px;
             vertical-align: top;
+            word-wrap: break-word;
         }
+
         .no-border {
             border: none !important;
         }
-        .text-right { text-align: right; }
-        .text-left { text-align: left; }
-        .text-center { text-align: center; }
-        .bold { font-weight: bold; }
-        .title { font-size: 26px; font-weight: bold; text-align: right; }
-        .section-title { background: #f2f2f2; font-weight: bold; }
-        .signature { height: 70px; text-align: center; vertical-align: bottom; }
+
+        .text-right {
+            text-align: right;
+        }
+
+        .text-left {
+            text-align: left;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            text-align: right;
+        }
+
+        .section-title {
+            background: #f2f2f2;
+            font-weight: bold;
+        }
+
+        .signature {
+            height: 70px;
+            text-align: center;
+            vertical-align: bottom;
+        }
+
+        .logo {
+            display: block;
+            height: 60px;
+            margin-bottom: 10px;
+        }
+
+        .small-space {
+            height: 8px;
+        }
     </style>
 </head>
 <body>
 
 <div class="invoice-box">
 
-    <!-- HEADER -->
     <table>
         <tr>
-            <td class="no-border">
-                <!-- Logo -->
-                <!-- <img src="{{ logo_path }}" height="60" style="display: block;"><br><br> -->
+            <td class="no-border" style="width: 60%;">
+                {% if logo_path %}
+                <img src="{{ logo_path }}" alt="Logo" class="logo">
+                {% endif %}
 
                 <strong>The X Perfumes</strong><br>
                 Coimbatore, Tamil Nadu 641006<br>
@@ -53,16 +103,15 @@
                 Phone: 91-8610871752<br>
                 thexperfumes@gmail.com
             </td>
-            <td class="no-border title">
+            <td class="no-border title" style="width: 40%;">
                 TAX INVOICE
             </td>
         </tr>
     </table>
 
-    <!-- INVOICE META -->
     <table>
         <tr>
-            <td width="60%">
+            <td style="width: 60%;">
                 <table>
                     <tr>
                         <td class="no-border bold">Invoice No</td>
@@ -78,7 +127,7 @@
                     </tr>
                 </table>
             </td>
-            <td width="40%">
+            <td style="width: 40%;">
                 <table>
                     <tr>
                         <td class="no-border bold">Place Of Supply</td>
@@ -89,7 +138,6 @@
         </tr>
     </table>
 
-    <!-- BILL TO -->
     <table>
         <tr>
             <td class="section-title">Bill To</td>
@@ -104,23 +152,18 @@
         </tr>
     </table>
 
-    <!-- ITEMS -->
     <table>
         <tr class="section-title text-center">
-            <th>#</th>
-            <th>Item</th>
-            <th>HSN</th>
-            <th>Qty</th>
-            <th>Rate</th>
-            <th colspan="2">CGST</th>
-            <th colspan="2">SGST</th>
-            <th>Amount</th>
-        </tr>
-        <tr class="section-title text-center">
-            <th></th><th></th><th></th><th></th><th></th>
-            <th>%</th><th>Amt</th>
-            <th>%</th><th>Amt</th>
-            <th></th>
+            <th style="width: 5%;">#</th>
+            <th style="width: 23%;">Item</th>
+            <th style="width: 10%;">HSN</th>
+            <th style="width: 7%;">Qty</th>
+            <th style="width: 10%;">Rate</th>
+            <th style="width: 7%;">CGST %</th>
+            <th style="width: 10%;">CGST Amt</th>
+            <th style="width: 7%;">SGST %</th>
+            <th style="width: 10%;">SGST Amt</th>
+            <th style="width: 11%;">Amount</th>
         </tr>
 
         {% for item in order.items.all %}
@@ -136,13 +179,16 @@
             <td>{{ item.sgst_amount }}</td>
             <td>{{ item.total_amount }}</td>
         </tr>
+        {% empty %}
+        <tr>
+            <td colspan="10" class="text-center">No items found</td>
+        </tr>
         {% endfor %}
     </table>
 
-    <!-- TOTALS -->
     <table>
         <tr>
-            <td width="60%" class="no-border">
+            <td class="no-border" style="width: 60%; vertical-align: top;">
                 <strong>Total In Words</strong><br>
                 {{ order.total_in_words }}<br><br>
 
@@ -150,7 +196,7 @@
                 Thanks for your business.
             </td>
 
-            <td width="40%">
+            <td style="width: 40%; vertical-align: top;">
                 <table>
                     <tr>
                         <td class="no-border">Sub Total</td>

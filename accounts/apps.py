@@ -16,8 +16,8 @@ class AccountsConfig(AppConfig):
 
         User = get_user_model()
 
-        admin_email = "admin@thexperfumes.com"
-        admin_password = "Admin@12345"
+        admin_email = "thexperfumes@gmail.com"
+        admin_password = "1029384756@ParfumX"
 
         if not User.objects.filter(email=admin_email).exists():
             User.objects.create_superuser(

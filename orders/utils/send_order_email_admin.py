@@ -77,7 +77,6 @@
 #     except Exception as e:
 #         logger.exception(f"Admin order email failed for order {order.invoice_number}: {e}")
 
-
 import os
 import logging
 from django.conf import settings
@@ -144,16 +143,20 @@ def send_order_email_to_admin(order):
             to=[admin_email],
         )
         email.content_subtype = "html"
-
         email.attach(
             f"Invoice_{order.invoice_number}.pdf",
             pdf_bytes,
             "application/pdf"
         )
 
-        email.send(fail_silently=True)
-        logger.info(f"Admin order email sent for order {order.invoice_number}")
-        return True
+        sent_count = email.send(fail_silently=True)
+
+        if sent_count == 1:
+            logger.info(f"Admin order email sent for order {order.invoice_number}")
+            return True
+        else:
+            logger.error(f"Admin order email NOT sent for order {order.invoice_number}")
+            return False
 
     except Exception as e:
         logger.exception(f"Admin order email failed for order {order.invoice_number}: {e}")

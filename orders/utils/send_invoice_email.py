@@ -93,7 +93,6 @@
 
 #     except Exception as e:
 #         logger.exception(f"Customer invoice email failed for order {order.invoice_number}: {e}")
-
 from django.conf import settings
 from django.core.mail import EmailMessage
 from .generate_invoice_pdf import generate_invoice_pdf
@@ -104,6 +103,10 @@ logger = logging.getLogger(__name__)
 
 def send_invoice_email_to_customer(order):
     try:
+        if not order.customer.email:
+            logger.error(f"Customer email missing for order {order.invoice_number}")
+            return False
+
         pdf_buffer = generate_invoice_pdf(order)
         pdf_bytes = pdf_buffer.getvalue()
 
@@ -125,9 +128,14 @@ def send_invoice_email_to_customer(order):
             "application/pdf"
         )
 
-        customer_email.send(fail_silently=True)
-        logger.info(f"Customer invoice email sent for order {order.invoice_number}")
-        return True
+        sent_count = customer_email.send(fail_silently=True)
+
+        if sent_count == 1:
+            logger.info(f"Customer invoice email sent for order {order.invoice_number}")
+            return True
+        else:
+            logger.error(f"Customer invoice email NOT sent for order {order.invoice_number}")
+            return False
 
     except Exception as e:
         logger.exception(f"Customer invoice email failed for order {order.invoice_number}: {e}")

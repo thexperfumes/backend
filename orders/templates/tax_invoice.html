@@ -6,12 +6,12 @@
     <style>
         @page {
             size: A4;
-            margin: 10mm;
+            margin: 8mm;
         }
 
         body {
             font-family: Arial, sans-serif;
-            font-size: 12px;
+            font-size: 11px;
             color: #111;
             margin: 0;
             padding: 0;
@@ -20,6 +20,7 @@
         .invoice-box {
             width: 100%;
             border: 1px solid #999;
+            box-sizing: border-box;
         }
 
         table {
@@ -30,35 +31,14 @@
 
         th, td {
             border: 1px solid #999;
-            padding: 8px;
+            padding: 5px 6px;
             vertical-align: top;
             word-wrap: break-word;
+            box-sizing: border-box;
         }
 
         .no-border {
             border: none !important;
-        }
-
-        .header-table td {
-            vertical-align: top;
-        }
-
-        .logo {
-            width: 120px;
-            height: auto;
-            margin-bottom: 8px;
-        }
-
-        .company-name {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 6px;
-        }
-
-        .invoice-title {
-            font-size: 24px;
-            font-weight: bold;
-            text-align: right;
         }
 
         .section-title {
@@ -74,57 +54,68 @@
             text-align: center;
         }
 
-        .text-bold {
+        .bold {
             font-weight: bold;
         }
 
-        .small-padding td,
-        .small-padding th {
-            padding: 6px;
+        .logo {
+            width: 110px;
+            height: auto;
+            margin-bottom: 8px;
         }
 
-        .info-table td {
-            height: 72px;
+        .company-name {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 5px;
         }
 
-        .bill-box td {
-            min-height: 70px;
+        .invoice-title {
+            font-size: 22px;
+            font-weight: bold;
+            text-align: right;
         }
 
-        .bottom-left {
+        .header-table td {
+            border: none;
+        }
+
+        .details-table td {
+            height: 65px;
+        }
+
+        .notes-cell {
             width: 58%;
             vertical-align: top;
+            min-height: 170px;
         }
 
-        .bottom-right {
+        .totals-cell {
             width: 42%;
             vertical-align: top;
             padding: 0;
         }
 
+        .totals-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
         .totals-table td {
             border-left: none;
             border-right: none;
+            padding: 8px 10px;
         }
 
         .totals-table tr:first-child td {
             border-top: none;
         }
 
-        .totals-table tr:last-child td {
-            border-bottom: none;
-        }
-
         .signature-box {
-            height: 120px;
+            height: 110px;
             text-align: center;
             vertical-align: bottom;
-            border-top: 1px solid #999;
-            padding-bottom: 14px;
-        }
-
-        .notes-box {
-            min-height: 180px;
+            padding-top: 30px;
         }
     </style>
 </head>
@@ -135,7 +126,7 @@
     <!-- Header -->
     <table class="header-table">
         <tr>
-            <td style="width: 60%;" class="no-border">
+            <td style="width: 60%;">
                 {% if logo_path %}
                     <img src="{{ logo_path }}" alt="Logo" class="logo">
                 {% endif %}
@@ -146,14 +137,14 @@
                 Phone: +91 8610871752<br>
                 thexperfumes@gmail.com
             </td>
-            <td style="width: 40%;" class="no-border">
+            <td style="width: 40%;">
                 <div class="invoice-title">TAX INVOICE</div>
             </td>
         </tr>
     </table>
 
-    <!-- Invoice info -->
-    <table class="info-table">
+    <!-- Invoice Details -->
+    <table class="details-table">
         <tr>
             <td style="width: 60%;">
                 <strong>Invoice No</strong> : {{ order.invoice_number }}<br><br>
@@ -167,7 +158,7 @@
     </table>
 
     <!-- Bill To -->
-    <table class="bill-box">
+    <table>
         <tr>
             <td class="section-title">Bill To</td>
         </tr>
@@ -181,20 +172,17 @@
         </tr>
     </table>
 
-    <!-- Items -->
-    <table class="small-padding">
+    <!-- Items Table -->
+    <table>
         <thead>
             <tr class="section-title text-center">
-                <th style="width: 5%;">#</th>
-                <th style="width: 24%;">Item</th>
-                <th style="width: 11%;">HSN</th>
-                <th style="width: 8%;">Qty</th>
-                <th style="width: 11%;">Rate</th>
-                <th style="width: 9%;">CGST %</th>
-                <th style="width: 11%;">CGST Amt</th>
-                <th style="width: 9%;">SGST %</th>
-                <th style="width: 11%;">SGST Amt</th>
-                <th style="width: 11%;">Amount</th>
+                <th style="width: 6%;">#</th>
+                <th style="width: 30%;">Item</th>
+                <th style="width: 14%;">HSN</th>
+                <th style="width: 10%;">Qty</th>
+                <th style="width: 14%;">Rate</th>
+                <th style="width: 10%;">GST %</th>
+                <th style="width: 16%;">Amount</th>
             </tr>
         </thead>
         <tbody>
@@ -205,15 +193,12 @@
                 <td>33072000</td>
                 <td>{{ item.quantity }}</td>
                 <td>{{ item.price }}</td>
-                <td>9%</td>
-                <td>{{ item.cgst_amount }}</td>
-                <td>9%</td>
-                <td>{{ item.sgst_amount }}</td>
+                <td>18%</td>
                 <td>{{ item.total_amount }}</td>
             </tr>
             {% empty %}
             <tr>
-                <td colspan="10" class="text-center">No items found</td>
+                <td colspan="7" class="text-center">No items found</td>
             </tr>
             {% endfor %}
         </tbody>
@@ -222,7 +207,7 @@
     <!-- Bottom Section -->
     <table>
         <tr>
-            <td class="bottom-left notes-box">
+            <td class="notes-cell">
                 <strong>Total In Words</strong><br>
                 {{ order.total_in_words }} Only
                 <br><br><br>
@@ -230,7 +215,7 @@
                 Thanks for your business.
             </td>
 
-            <td class="bottom-right">
+            <td class="totals-cell">
                 <table class="totals-table">
                     <tr>
                         <td>Sub Total</td>
@@ -259,7 +244,7 @@
                         <td class="text-right">{{ order.sgst_total }}</td>
                     </tr>
 
-                    <tr class="text-bold">
+                    <tr class="bold">
                         <td>Total</td>
                         <td class="text-right">₹ {{ order.total_amount }}</td>
                     </tr>
@@ -269,17 +254,21 @@
                         <td class="text-right">(₹ {{ order.total_amount }})</td>
                     </tr>
 
-                    <tr class="text-bold">
+                    <tr class="bold">
                         <td>Balance Due</td>
                         <td class="text-right">₹ 0.00</td>
                     </tr>
                 </table>
 
-                <div class="signature-box">
-                    Alexander V
-                    <br><br>
-                    <strong>Authorized Signature</strong>
-                </div>
+                <table>
+                    <tr>
+                        <td class="signature-box">
+                            Alexander V
+                            <br><br>
+                            <strong>Authorized Signature</strong>
+                        </td>
+                    </tr>
+                </table>
             </td>
         </tr>
     </table>

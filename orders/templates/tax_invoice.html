@@ -6,13 +6,13 @@
     <style>
         @page {
             size: A4;
-            margin: 12mm;
+            margin: 10mm;
         }
 
         body {
             font-family: Arial, sans-serif;
             font-size: 12px;
-            color: #000;
+            color: #111;
             margin: 0;
             padding: 0;
         }
@@ -20,8 +20,6 @@
         .invoice-box {
             width: 100%;
             border: 1px solid #999;
-            padding: 10px;
-            box-sizing: border-box;
         }
 
         table {
@@ -30,9 +28,9 @@
             table-layout: fixed;
         }
 
-        td, th {
+        th, td {
             border: 1px solid #999;
-            padding: 6px;
+            padding: 8px;
             vertical-align: top;
             word-wrap: break-word;
         }
@@ -41,23 +39,23 @@
             border: none !important;
         }
 
-        .text-right {
-            text-align: right;
+        .header-table td {
+            vertical-align: top;
         }
 
-        .text-left {
-            text-align: left;
+        .logo {
+            width: 120px;
+            height: auto;
+            margin-bottom: 8px;
         }
 
-        .text-center {
-            text-align: center;
-        }
-
-        .bold {
+        .company-name {
+            font-size: 20px;
             font-weight: bold;
+            margin-bottom: 6px;
         }
 
-        .title {
+        .invoice-title {
             font-size: 24px;
             font-weight: bold;
             text-align: right;
@@ -68,20 +66,65 @@
             font-weight: bold;
         }
 
-        .signature {
-            height: 70px;
+        .text-right {
+            text-align: right;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+
+        .text-bold {
+            font-weight: bold;
+        }
+
+        .small-padding td,
+        .small-padding th {
+            padding: 6px;
+        }
+
+        .info-table td {
+            height: 72px;
+        }
+
+        .bill-box td {
+            min-height: 70px;
+        }
+
+        .bottom-left {
+            width: 58%;
+            vertical-align: top;
+        }
+
+        .bottom-right {
+            width: 42%;
+            vertical-align: top;
+            padding: 0;
+        }
+
+        .totals-table td {
+            border-left: none;
+            border-right: none;
+        }
+
+        .totals-table tr:first-child td {
+            border-top: none;
+        }
+
+        .totals-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .signature-box {
+            height: 120px;
             text-align: center;
             vertical-align: bottom;
+            border-top: 1px solid #999;
+            padding-bottom: 14px;
         }
 
-        .logo {
-            display: block;
-            height: 60px;
-            margin-bottom: 10px;
-        }
-
-        .small-space {
-            height: 8px;
+        .notes-box {
+            min-height: 180px;
         }
     </style>
 </head>
@@ -89,56 +132,42 @@
 
 <div class="invoice-box">
 
-    <table>
+    <!-- Header -->
+    <table class="header-table">
         <tr>
-            <td class="no-border" style="width: 60%;">
+            <td style="width: 60%;" class="no-border">
                 {% if logo_path %}
-                <img src="{{ logo_path }}" alt="Logo" class="logo">
+                    <img src="{{ logo_path }}" alt="Logo" class="logo">
                 {% endif %}
-
-                <strong>The X Perfumes</strong><br>
+                <div class="company-name">The X Perfumes</div>
                 Coimbatore, Tamil Nadu 641006<br>
                 India<br>
                 GSTIN: 33ASHPA2999P1Z7<br>
-                Phone: 91-8610871752<br>
+                Phone: +91 8610871752<br>
                 thexperfumes@gmail.com
             </td>
-            <td class="no-border title" style="width: 40%;">
-                TAX INVOICE
+            <td style="width: 40%;" class="no-border">
+                <div class="invoice-title">TAX INVOICE</div>
             </td>
         </tr>
     </table>
 
-    <table>
+    <!-- Invoice info -->
+    <table class="info-table">
         <tr>
             <td style="width: 60%;">
-                <table>
-                    <tr>
-                        <td class="no-border bold">Invoice No</td>
-                        <td class="no-border">: {{ order.invoice_number }}</td>
-                    </tr>
-                    <tr>
-                        <td class="no-border bold">Invoice Date</td>
-                        <td class="no-border">: {{ order.created_at|date:"d F Y" }}</td>
-                    </tr>
-                    <tr>
-                        <td class="no-border bold">Payment Mode</td>
-                        <td class="no-border">: {{ order.payment_mode }}</td>
-                    </tr>
-                </table>
+                <strong>Invoice No</strong> : {{ order.invoice_number }}<br><br>
+                <strong>Invoice Date</strong> : {{ order.created_at|date:"d F Y" }}<br><br>
+                <strong>Payment Mode</strong> : {{ order.payment_mode }}
             </td>
             <td style="width: 40%;">
-                <table>
-                    <tr>
-                        <td class="no-border bold">Place Of Supply</td>
-                        <td class="no-border">: Tamil Nadu (33)</td>
-                    </tr>
-                </table>
+                <strong>Place Of Supply</strong> : Tamil Nadu (33)
             </td>
         </tr>
     </table>
 
-    <table>
+    <!-- Bill To -->
+    <table class="bill-box">
         <tr>
             <td class="section-title">Bill To</td>
         </tr>
@@ -152,107 +181,110 @@
         </tr>
     </table>
 
-    <table>
-        <tr class="section-title text-center">
-            <th style="width: 5%;">#</th>
-            <th style="width: 23%;">Item</th>
-            <th style="width: 10%;">HSN</th>
-            <th style="width: 7%;">Qty</th>
-            <th style="width: 10%;">Rate</th>
-            <th style="width: 7%;">CGST %</th>
-            <th style="width: 10%;">CGST Amt</th>
-            <th style="width: 7%;">SGST %</th>
-            <th style="width: 10%;">SGST Amt</th>
-            <th style="width: 11%;">Amount</th>
-        </tr>
-
-        {% for item in order.items.all %}
-        <tr class="text-center">
-            <td>{{ forloop.counter }}</td>
-            <td class="text-left">{{ item.perfume.name }}</td>
-            <td>33072000</td>
-            <td>{{ item.quantity }}</td>
-            <td>{{ item.price }}</td>
-            <td>9%</td>
-            <td>{{ item.cgst_amount }}</td>
-            <td>9%</td>
-            <td>{{ item.sgst_amount }}</td>
-            <td>{{ item.total_amount }}</td>
-        </tr>
-        {% empty %}
-        <tr>
-            <td colspan="10" class="text-center">No items found</td>
-        </tr>
-        {% endfor %}
+    <!-- Items -->
+    <table class="small-padding">
+        <thead>
+            <tr class="section-title text-center">
+                <th style="width: 5%;">#</th>
+                <th style="width: 24%;">Item</th>
+                <th style="width: 11%;">HSN</th>
+                <th style="width: 8%;">Qty</th>
+                <th style="width: 11%;">Rate</th>
+                <th style="width: 9%;">CGST %</th>
+                <th style="width: 11%;">CGST Amt</th>
+                <th style="width: 9%;">SGST %</th>
+                <th style="width: 11%;">SGST Amt</th>
+                <th style="width: 11%;">Amount</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in order.items.all %}
+            <tr class="text-center">
+                <td>{{ forloop.counter }}</td>
+                <td style="text-align:left;">{{ item.perfume.name }}</td>
+                <td>33072000</td>
+                <td>{{ item.quantity }}</td>
+                <td>{{ item.price }}</td>
+                <td>9%</td>
+                <td>{{ item.cgst_amount }}</td>
+                <td>9%</td>
+                <td>{{ item.sgst_amount }}</td>
+                <td>{{ item.total_amount }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="10" class="text-center">No items found</td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 
+    <!-- Bottom Section -->
     <table>
         <tr>
-            <td class="no-border" style="width: 60%; vertical-align: top;">
+            <td class="bottom-left notes-box">
                 <strong>Total In Words</strong><br>
-                {{ order.total_in_words }}<br><br>
-
+                {{ order.total_in_words }} Only
+                <br><br><br>
                 <strong>Notes</strong><br>
                 Thanks for your business.
             </td>
 
-            <td style="width: 40%; vertical-align: top;">
-                <table>
+            <td class="bottom-right">
+                <table class="totals-table">
                     <tr>
-                        <td class="no-border">Sub Total</td>
-                        <td class="no-border text-right">{{ order.subtotal }}</td>
+                        <td>Sub Total</td>
+                        <td class="text-right">{{ order.subtotal }}</td>
                     </tr>
 
                     {% if order.discount_amount %}
                     <tr>
-                        <td class="no-border">Discount</td>
-                        <td class="no-border text-right">- ₹{{ order.discount_amount }}</td>
+                        <td>Discount</td>
+                        <td class="text-right">- ₹{{ order.discount_amount }}</td>
                     </tr>
                     {% endif %}
 
                     <tr>
-                        <td class="no-border">Shipping Charge</td>
-                        <td class="no-border text-right">₹ {{ order.shipping_charge }}</td>
+                        <td>Shipping Charge</td>
+                        <td class="text-right">₹ {{ order.shipping_charge }}</td>
                     </tr>
 
                     <tr>
-                        <td class="no-border">CGST (9%)</td>
-                        <td class="no-border text-right">{{ order.cgst_total }}</td>
+                        <td>CGST (9%)</td>
+                        <td class="text-right">{{ order.cgst_total }}</td>
                     </tr>
 
                     <tr>
-                        <td class="no-border">SGST (9%)</td>
-                        <td class="no-border text-right">{{ order.sgst_total }}</td>
+                        <td>SGST (9%)</td>
+                        <td class="text-right">{{ order.sgst_total }}</td>
                     </tr>
 
-                    <tr class="bold">
-                        <td class="no-border">Total</td>
-                        <td class="no-border text-right">₹ {{ order.total_amount }}</td>
+                    <tr class="text-bold">
+                        <td>Total</td>
+                        <td class="text-right">₹ {{ order.total_amount }}</td>
                     </tr>
 
                     <tr>
-                        <td class="no-border">Payment Made</td>
-                        <td class="no-border text-right">(₹ {{ order.total_amount }})</td>
+                        <td>Payment Made</td>
+                        <td class="text-right">(₹ {{ order.total_amount }})</td>
                     </tr>
 
-                    <tr class="bold">
-                        <td class="no-border">Balance Due</td>
-                        <td class="no-border text-right">₹ 0.00</td>
+                    <tr class="text-bold">
+                        <td>Balance Due</td>
+                        <td class="text-right">₹ 0.00</td>
                     </tr>
                 </table>
 
-                <table>
-                    <tr>
-                        <td class="signature no-border">
-                            Alexander V<br><br>
-                            <strong>Authorized Signature</strong>
-                        </td>
-                    </tr>
-                </table>
+                <div class="signature-box">
+                    Alexander V
+                    <br><br>
+                    <strong>Authorized Signature</strong>
+                </div>
             </td>
         </tr>
     </table>
 
 </div>
+
 </body>
 </html>

@@ -219,47 +219,7 @@ class CreateRazorpayOrderView(APIView):
 # ==============================
 # VERIFY PAYMENT
 # ==============================
-# class VerifyPaymentAPIView(APIView):
-#     permission_classes = [IsAuthenticated]
 
-#     def post(self, request):
-#         razorpay_order_id = request.data.get("razorpay_order_id")
-#         razorpay_payment_id = request.data.get("razorpay_payment_id")
-#         razorpay_signature = request.data.get("razorpay_signature")
-
-#         try:
-#             order = Order.objects.get(
-#                 razorpay_order_id=razorpay_order_id,
-#                 customer=request.user
-#             )
-#         except Order.DoesNotExist:
-#             return Response({"error": "Order not found"}, status=404)
-
-#         message = f"{razorpay_order_id}|{razorpay_payment_id}"
-#         expected_signature = hmac.new(
-#             settings.RAZORPAY_KEY_SECRET.encode(),
-#             message.encode(),
-#             hashlib.sha256
-#         ).hexdigest()
-
-#         if expected_signature != razorpay_signature:
-#             return Response({"error": "Invalid signature"}, status=400)
-
-#         if order.status == "CONFIRMED":
-#             return Response({"message": "Already verified"})
-
-#         order.razorpay_payment_id = razorpay_payment_id
-#         order.razorpay_signature = razorpay_signature
-#         order.status = "CONFIRMED"
-#         order.save(update_fields=[
-#             "razorpay_payment_id",
-#             "razorpay_signature",
-#             "status"
-#         ])
-
-#         order_confirmed.send(sender=Order, instance=order)
-
-#         return Response({"message": "Payment verified successfully"})
 
 class VerifyPaymentAPIView(APIView):
     permission_classes = [IsAuthenticated]

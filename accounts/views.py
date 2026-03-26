@@ -264,25 +264,116 @@ class ProfileAPIView(APIView):
 # =======================
 # 🔐 PASSWORD RESET
 # =======================
+# class ForgotPasswordView(APIView):
+#     permission_classes = [AllowAny]
+
+#     def post(self, request):
+#         email = request.data.get("email")
+#         if not email:
+#             return Response({"error": "Email is required"}, status=400)
+
+#         user = User.objects.filter(email=email).first()
+#         if not user:
+#             return Response({"message": "If the email exists, a reset link has been sent"}, status=200)
+
+#         uid = urlsafe_base64_encode(force_bytes(user.pk))
+#         token = token_generator.make_token(user)
+#         reset_link = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}"
+
+#         send_mail(subject="Reset your password", message=f"Click the link to reset your password:\n{reset_link}", from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email])
+#         return Response({"message": "Reset link sent to your email"})
+import os
+import requests
+from django.conf import settings
+from django.utils.http import urlsafe_base64_encode
+from django.utils.encoding import force_bytes
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+
+from django.contrib.auth import get_user_model
+   # adjust import if needed
+
+User = get_user_model()
+
+
 class ForgotPasswordView(APIView):
     permission_classes = [AllowAny]
 
     def post(self, request):
         email = request.data.get("email")
+
         if not email:
             return Response({"error": "Email is required"}, status=400)
 
         user = User.objects.filter(email=email).first()
+
+        # Do not reveal whether user exists
         if not user:
-            return Response({"message": "If the email exists, a reset link has been sent"}, status=200)
+            return Response(
+                {"message": "If the email exists, a reset link has been sent"},
+                status=200
+            )
 
         uid = urlsafe_base64_encode(force_bytes(user.pk))
         token = token_generator.make_token(user)
         reset_link = f"{settings.FRONTEND_URL}/reset-password/{uid}/{token}"
 
-        send_mail(subject="Reset your password", message=f"Click the link to reset your password:\n{reset_link}", from_email=settings.DEFAULT_FROM_EMAIL, recipient_list=[email])
-        return Response({"message": "Reset link sent to your email"})
+        subject = "Reset your password"
 
+        html_content = f"""
+        <html>
+            <body>
+                <p>Hello,</p>
+                <p>Click the button below to reset your password:</p>
+                <p>
+                    <a href="{reset_link}" 
+                       style="display:inline-block;padding:10px 18px;background:#000;color:#fff;text-decoration:none;border-radius:6px;">
+                       Reset Password
+                    </a>
+                </p>
+                <p>If the button does not work, use this link:</p>
+                <p>{reset_link}</p>
+                <p>If you did not request this, you can ignore this email.</p>
+                <p>Perfume Store Team</p>
+            </body>
+        </html>
+        """
+
+        url = "https://api.brevo.com/v3/smtp/email"
+        headers = {
+            "accept": "application/json",
+            "api-key": os.environ.get("BREVO_API_KEY"),
+            "content-type": "application/json",
+        }
+
+        data = {
+            "sender": {
+                "name": "Perfume Store",
+                "email": "contact@thexperfumes.com"
+            },
+            "to": [
+                {"email": email}
+            ],
+            "subject": subject,
+            "htmlContent": html_content,
+        }
+
+        try:
+            response = requests.post(url, headers=headers, json=data, timeout=30)
+            response.raise_for_status()
+            return Response({"message": "Reset link sent to your email"}, status=200)
+
+        except requests.exceptions.RequestException as e:
+            print("Brevo API error:", repr(e))
+            try:
+                print("Brevo response:", response.text)
+            except:
+                pass
+            return Response(
+                {"error": f"Email sending failed: {str(e)}"},
+                status=500
+            )
 
 class ResetPasswordView(APIView):
     permission_classes = [AllowAny]
